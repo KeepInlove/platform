@@ -1,0 +1,78 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  autoconfigure:
+    exclude:
+      - com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceAutoConfigure
+#  data:
+#    redis:
+#      host: 127.0.0.1
+#      port: 6379
+#      password:
+#      database: 0
+mybatis-flex:
+  datasource:
+    mysql-datasource:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/test?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai
+      username: root
+      password: root
+      druid:
+        name: alibabaDruidPool
+        initial-size: 5
+        minIdle: 5
+        maxActive: 20
+        maxWait: 60000
+        #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        #连接保持空闲而不被驱逐的最小时间，单位是毫秒
+        minEvictableIdleTimeMillis: 300000
+        maxEvictableIdleTimeMillis: 900000
+        default-auto-commit: true
+        #用来检测连接是否有效的sql
+        validationQuery: SELECT 1
+        #申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
+        testWhileIdle: true
+        #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+        testOnBorrow: false
+        #开启web监控可视化
+        stat-view-servlet:
+          enabled: true
+          allow: ""
+          url-pattern: /druid/*
+          login-username: admin
+          login-password: admin
+    postgresql-datasource:
+      type: com.alibaba.druid.pool.DruidDataSource
+      url: jdbc:postgresql://localhost:5432/test
+      driver-class-name: org.postgresql.Driver
+      username: postgres
+      password: postgres
+      druid:
+        initial-size: 5
+        minIdle: 5
+        maxActive: 20
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        maxEvictableIdleTimeMillis: 900000
+        default-auto-commit: true
+        validationQuery: SELECT 1
+        testWhileIdle: true
+        testOnBorrow: false
+        filter:
+          stat:
+            log-slow-sql: true
+            slow-sql-millis: 2000
+            merge-sql: true
+          wall:
+            config:
+              multi-statement-allow: true
+  mapper-locations: classpath:/mapper/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    日志级别
+logging:
+  level:
+    com.gxy.core.mapper: trace
