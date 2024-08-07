@@ -16,9 +16,13 @@ public class Codegen {
     public static void main(String[] args) {
         //配置数据源
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/test?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai");
-        dataSource.setUsername("root");
-        dataSource.setPassword("root");
+//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/test?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai");
+//        dataSource.setUsername("root");
+//        dataSource.setPassword("root");
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/talenthubDB");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("postgres");
 
         //创建配置内容，两种风格都可以。
 //        GlobalConfig globalConfig = createGlobalConfigUseStyle1();
@@ -70,18 +74,18 @@ public class Codegen {
                 .setSince("1.0.0");
         //设置根包
         globalConfig.getPackageConfig()
-                .setSourceDir("E://project/java/2024/ai-study/AI-Tool-Platform/generator/src/main/java")
-                .setBasePackage("com.gxy.business")
+                .setSourceDir("D://work//code//platform//generator//src//main//java//com//gxy//generator")
+                .setBasePackage("com.gxy")
                 .setEntityPackage(globalConfig.getBasePackage() + ".entity")
-                .setMapperPackage(globalConfig.getBasePackage() + ".mapper")
+                .setMapperPackage(globalConfig.getBasePackage() + ".mapper.postgresql")
                 .setServicePackage(globalConfig.getBasePackage() + ".service")
                 .setServiceImplPackage(globalConfig.getBasePackage() + ".service.impl")
-                .setControllerPackage(globalConfig.getBasePackage() + ".controller")
-                .setMapperXmlPath("E://project/java/2024/ai-study/AI-Tool-Platform/generator/src//main/resources/mapper");
+//                .setControllerPackage(globalConfig.getBasePackage() + ".controller")
+                .setMapperXmlPath("D://work//code//platform//generator//src//main/resources/mapper");
 
         //设置表前缀和只生成哪些表，setGenerateTable 未配置时，生成所有表
         globalConfig.getStrategyConfig()
-                .setGenerateTable("member");
+                .setGenerateTable("candidate");
 
         //设置生成 entity 并启用 Lombok
         globalConfig.enableEntity()

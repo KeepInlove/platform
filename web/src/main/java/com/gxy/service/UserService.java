@@ -1,6 +1,6 @@
-package com.gxy.core.service;
+package com.gxy.service;
 
-import com.gxy.core.entity.UserEntity;
+import com.gxy.entity.UserEntity;
 import com.mybatisflex.core.service.IService;
 
 /**
@@ -9,4 +9,5 @@ import com.mybatisflex.core.service.IService;
  * @Created by guoxinyu
  */
 public interface UserService extends IService<UserEntity> {
+
 }

@@ -1,8 +1,8 @@
-package com.gxy.core.service.impl;
+package com.gxy.service.impl;
 
-import com.gxy.core.entity.UserEntity;
-import com.gxy.core.mapper.mysql.UserMapper;
-import com.gxy.core.service.UserService;
+import com.gxy.entity.UserEntity;
+import com.gxy.mapper.mysql.UserMapper;
+import com.gxy.service.UserService;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

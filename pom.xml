@@ -18,7 +18,7 @@
 <!--    中间件-->
     <module>middleware</module>
  <!--    web模块-->
-    <module>core</module>
+<!--    <module>core</module>-->
 <!--    代码生产模块-->
     <module>generator</module>
     <module>web</module>

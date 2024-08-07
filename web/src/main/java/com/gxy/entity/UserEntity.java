@@ -1,4 +1,4 @@
-package com.gxy.core.entity;
+package com.gxy.entity;
 
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;

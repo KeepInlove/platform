@@ -1,0 +1,49 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxy.mapper.postgresql.CandidateMapper">
+    <resultMap id="BaseResultMap" type="com.gxy.entity.Candidate">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="age" column="age" jdbcType="INTEGER"/>
+        <result property="arrivalTime" column="arrival_time" jdbcType="VARCHAR"/>
+        <result property="bossId" column="boss_id" jdbcType="INTEGER"/>
+        <result property="contactLink" column="contact_link" jdbcType="VARCHAR"/>
+        <result property="contactStatus" column="contact_status" jdbcType="INTEGER"/>
+        <result property="education" column="education" jdbcType="VARCHAR"/>
+        <result property="gender" column="gender" jdbcType="VARCHAR"/>
+        <result property="jobId" column="job_id" jdbcType="INTEGER"/>
+        <result property="major" column="major" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="personalAdvantages" column="personal_advantages" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="professionalSkills" column="professional_skills" jdbcType="VARCHAR"/>
+        <result property="resumeAttachment" column="resume_attachment" jdbcType="VARCHAR"/>
+        <result property="school" column="school" jdbcType="VARCHAR"/>
+        <result property="schoolExperience" column="school_experience" jdbcType="VARCHAR"/>
+        <result property="score" column="score" jdbcType="INTEGER"/>
+        <result property="workExperience" column="work_experience" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, age, arrival_time, boss_id, contact_link, contact_status, education, gender, job_id,
+        major, name, personal_advantages, phone, professional_skills, resume_attachment, school,
+        school_experience, score, work_experience
+    </sql>
+<!--    根据名字,学校,专业查询-->
+    <select id="selectByNameSchoolMajor" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from candidate
+        <where>
+            <if test="name != null">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="school != null">
+                and school like concat('%',#{school})
+            </if>
+            <if test="major != null">
+                and major like concat('%',#{major},'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>
