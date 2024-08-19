@@ -39,7 +39,7 @@ public class Candidate implements Serializable {
     /**
      * 年龄
      */
-    private Integer age;
+//    private Integer age;
 
     /**
      * 性别
@@ -114,7 +114,7 @@ public class Candidate implements Serializable {
     /**
      * 同步来自职位 id
      */
-    private Integer jobId;
+    private String jobId;
 
     /**
      * 评分

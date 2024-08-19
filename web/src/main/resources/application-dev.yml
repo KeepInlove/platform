@@ -31,6 +31,13 @@ spring:
   autoconfigure:
     exclude:
       - com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceAutoConfigure
+  elasticsearch:
+    uris: http://localhost:9200
+    connection-timeout: 1s
+    socket-timeout: 30s
+    jackson:
+      serialization:
+        indent-output: true
 #  data:
 #    redis:
 #      host: 127.0.0.1
@@ -58,3 +65,7 @@ mybatis-flex:
 logging:
   level:
     com.gxy.mapper: debug
+
+openai:
+  api:
+    baseUrl: http://153.37.173.82:58002/v1/chat/completions
