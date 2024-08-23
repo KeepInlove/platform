@@ -16,13 +16,13 @@ public class Codegen {
     public static void main(String[] args) {
         //配置数据源
         HikariDataSource dataSource = new HikariDataSource();
-//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/test?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai");
-//        dataSource.setUsername("root");
-//        dataSource.setPassword("root");
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/talenthubDB");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres");
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/test?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai");
+        dataSource.setUsername("root");
+        dataSource.setPassword("root");
+//        dataSource.setDriverClassName("org.postgresql.Driver");
+//        dataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/talenthubDB");
+//        dataSource.setUsername("postgres");
+//        dataSource.setPassword("postgres");
 
         //创建配置内容，两种风格都可以。
 //        GlobalConfig globalConfig = createGlobalConfigUseStyle1();
@@ -85,7 +85,7 @@ public class Codegen {
 
         //设置表前缀和只生成哪些表，setGenerateTable 未配置时，生成所有表
         globalConfig.getStrategyConfig()
-                .setGenerateTable("candidate");
+                .setGenerateTable("model_requests_responses");
 
         //设置生成 entity 并启用 Lombok
         globalConfig.enableEntity()

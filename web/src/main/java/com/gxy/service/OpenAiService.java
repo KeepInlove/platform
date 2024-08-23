@@ -7,5 +7,7 @@ package com.gxy.service;
  */
 public interface OpenAiService {
 
-    public String openAiReq(String prompt);
+     String openAiReq(String prompt);
+
+     String openQwAiReq(String sessionId,String prompt, String roleDesc);
 }

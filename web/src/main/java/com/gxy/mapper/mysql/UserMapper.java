@@ -8,6 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @Date 2024/7/23
  * @Created by guoxinyu
  */
-@Mapper
+
 public interface UserMapper extends BaseMapper<UserEntity> {
 }
