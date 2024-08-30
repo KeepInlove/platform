@@ -1,7 +1,6 @@
 package com.gxy.mapper.mysql;
 import com.gxy.entity.UserEntity;
 import com.mybatisflex.core.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @Classname UserMapper

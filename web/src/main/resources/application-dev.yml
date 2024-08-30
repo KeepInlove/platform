@@ -38,6 +38,13 @@ spring:
     jackson:
       serialization:
         indent-output: true
+  ai:
+    openai:
+      api-key: sk-lAC9kwN0PsXfYB2e03B428F44266409bAe837f8f021b6245
+      base-url: https://apikeyplus.com
+      chat:
+        options:
+          model: gpt-3.5-turbo
 #  data:
 #    redis:
 #      host: 127.0.0.1
@@ -69,5 +76,5 @@ logging:
 openai:
   api:
     baseUrl: http://153.37.173.82:58002/v1/chat/completions
-    model: qwen2-72b-instruct
+    model: qwen-turbo
     apiKey: sk-d910833e4e2f43f6967ca49117823506

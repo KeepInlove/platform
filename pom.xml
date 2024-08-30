@@ -14,6 +14,25 @@
     <relativePath/>
   </parent>
 
+  <repositories>
+    <repository>
+      <id>spring-milestones</id>
+      <name>Spring Milestones</name>
+      <url>https://repo.spring.io/milestone</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>spring-snapshots</id>
+      <name>Spring Snapshots</name>
+      <url>https://repo.spring.io/snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
+
   <modules>
 <!--    中间件-->
     <module>middleware</module>
@@ -67,6 +86,16 @@
         <artifactId>spring-boot-starter-web</artifactId>
         <version>${spring-boot.version}</version>
       </dependency>
+
+      <!--spring AI-->
+      <dependency>
+        <groupId>org.springframework.ai</groupId>
+        <artifactId>spring-ai-bom</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
       <!--数据库相关开始-->
       <dependency>
         <groupId>com.mysql</groupId>
@@ -108,11 +137,11 @@
       </dependency>
       <!--代码生成结束-->
 
-      <dependency>
-        <groupId>com.github.xiaoymin</groupId>
-        <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-        <version>4.1.0</version>
-      </dependency>
+<!--      <dependency>-->
+<!--        <groupId>com.github.xiaoymin</groupId>-->
+<!--        <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>-->
+<!--        <version>4.1.0</version>-->
+<!--      </dependency>-->
       <dependency>
         <groupId>com.auth0</groupId>
         <artifactId>java-jwt</artifactId>
@@ -167,14 +196,15 @@
         <artifactId>commons-io</artifactId>
         <version>${commons-io.version}</version>
       </dependency>
+<!--      阿里大数据AI-->
       <!-- https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
       <dependency>
         <groupId>com.alibaba</groupId>
         <artifactId>dashscope-sdk-java</artifactId>
         <version>${dashscope.version}</version>
       </dependency>
+
     </dependencies>
   </dependencyManagement>
-
 
 </project>
