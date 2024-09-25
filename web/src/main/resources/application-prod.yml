@@ -45,12 +45,20 @@ spring:
     jackson:
       serialization:
         indent-output: true
-#  data:
-#    redis:
-#      host: 127.0.0.1
-#      port: 6379
-#      password:
-#      database: 0
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password:
+      database: 0
+      jedis:
+        pool:
+          max-active: 8
+          max-wait: 10000
+          max-idle: 8
+          min-idle: 0
+      timeout: 10000
+      connect-timeout: 10000 # 连接超时，单位为毫秒
 mybatis-flex:
   datasource:
     mysql-datasource:
@@ -76,5 +84,11 @@ logging:
 openai:
   api:
     baseUrl: http://153.37.173.82:58002/v1/chat/completions
-    model: qwen-turbo
+    model: qwen-max
     apiKey: sk-d910833e4e2f43f6967ca49117823506
+server:
+  port: 8088
+#  ssl:
+#    key-store: file:C:/Program Files/Java/jdk-21/bin/keystore.jks
+#    key-store-password: gxy123
+#    key-password: gxy123

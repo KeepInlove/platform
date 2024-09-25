@@ -1,4 +1,19 @@
 spring:
+  data:
+    redis:
+      host: 10.253.3.101
+      port: 8077
+      password: hjFCase@k493gs
+      database: 0
+      client-type: jedis      # 指定使用 Jedis 客户端
+      jedis:
+        pool:
+          max-active: 8
+          max-wait: 10000
+          max-idle: 8
+          min-idle: 0
+      timeout: 10000
+      connect-timeout: 10000 # 连接超时，单位为毫秒
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -40,17 +55,11 @@ spring:
         indent-output: true
   ai:
     openai:
-      api-key: sk-lAC9kwN0PsXfYB2e03B428F44266409bAe837f8f021b6245
-      base-url: https://apikeyplus.com
+      api-key: sk-3Ue5Asspj0olkmHmqgLbaI28XteA7DgCS5mJs6Q9pkbrWgHU
+      base-url: https://api.chatanywhere.com.cn
       chat:
         options:
           model: gpt-3.5-turbo
-#  data:
-#    redis:
-#      host: 127.0.0.1
-#      port: 6379
-#      password:
-#      database: 0
 mybatis-flex:
   datasource:
     mysql-datasource:
@@ -78,3 +87,14 @@ openai:
     baseUrl: http://153.37.173.82:58002/v1/chat/completions
     model: qwen-turbo
     apiKey: sk-d910833e4e2f43f6967ca49117823506
+server:
+  port: 8080
+  ssl:
+    key-store: file:C:/Program Files/Java/jdk-21/bin/keystore.jks
+    key-store-password: gxy123
+    key-password: gxy123
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true

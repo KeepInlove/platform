@@ -50,8 +50,8 @@ public class AppTest {
     @Autowired
     private OpenAiChatModel openAiChatModel;
 
-    @Autowired
-    private ChatClient chatClient;
+//    @Autowired
+//    private ChatClient chatClient;
 
     @Test
     public void test() {
@@ -87,7 +87,7 @@ public class AppTest {
 
     @Test
     public void test2() {
-        String prompt="你好,现在是什么时间?什么天气";
+        String prompt="现在是几点?当前天气怎么样?";
         String string = openAiService.openQwAiReq(null,prompt,null);
         System.out.println(string);
     }
@@ -152,7 +152,7 @@ public class AppTest {
 //        ChatResponse chatResponse = chatClient.prompt(new Prompt(messages)).call().chatResponse();
 
 //        log.info("chatResponse:{}", chatResponse);
-        UserMessage userMessage = new UserMessage("你是谁?会什么");
+        UserMessage userMessage = new UserMessage("帮我使用Java写一个排序算法");
         String content = openAiChatModel.call(userMessage);
         System.out.println(content);
 
