@@ -8,9 +8,9 @@ import com.gxy.service.RedisService;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +23,15 @@ import java.util.Map;
  * @Created by guoxinyu
  */
 @Component
+@Slf4j
 public class QueueManager {
 
     @Resource
-    private RedisService redisService;  // 使用 RedisServiceImpl 代替 RedisTemplate
+    private RedisService redisService;  // 使// RedisServiceImpl 代替 RedisTemplate
+
     private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setLongSerializationPolicy(LongSerializationPolicy.STRING).disableHtmlEscaping().create();
 
-    private static final Logger logger = LoggerFactory.getLogger(QueueManager.class);
+
     @PostConstruct
     public void initGpuConfig() {
         // 清空之前的配置
@@ -76,7 +78,7 @@ public class QueueManager {
     private List<QueueInfoDTO> getGpuConfigFromRedis(String key) {
         Map<String, String> gpuMap = redisService.getHashEntries(key);
         if (gpuMap == null || gpuMap.isEmpty()) {
-            logger.warn("从 Redis 中未获取到队列配置: {}", key);
+            log.warn("从 Redis 中未获取到队列配置: {}", key);
             return new ArrayList<>();
         }
 

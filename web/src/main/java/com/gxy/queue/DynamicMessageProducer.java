@@ -1,6 +1,5 @@
 package com.gxy.queue;
 
-import com.gxy.message.QueueManager;
 import com.gxy.service.RedisService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
