@@ -2,6 +2,7 @@ package com.gxy.service;
 
 import org.springframework.data.redis.connection.RedisListCommands.Direction;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -112,6 +113,9 @@ public interface RedisService {
      * @return 是否插入成功
      */
     boolean rightPushToList(String key, String value);
+
+    boolean rightPushToList(String key, List<String> value);
+
     /**
      * 将消息插入到 Redis 列表的头部
      * @param key Redis 列表的键
@@ -121,6 +125,8 @@ public interface RedisService {
     boolean leftPushToList(String key, String value);
 
 
+    boolean leftPushToList(String key, List<String> value);
+
     /**
      * 从队列的尾部弹出消息
      * @param key Redis 列表的键
@@ -129,5 +135,26 @@ public interface RedisService {
      * @return 弹出的消息
      */
     String rightPop(String key, long timeout, TimeUnit timeUnit);
+
+    /**
+     * 阻塞式移动元素
+     * @param sourceKey
+     * @param destinationKey
+     * @param timeout
+     * @param timeUnit
+     * @return
+     */
+
+    String blmove(String sourceKey, String destinationKey, long timeout, TimeUnit timeUnit);
+
+    /**
+     *  移除队列中的元素
+     * @param key
+     * @param count
+     * @param value
+     */
+
+    void removeQueue(String key, int count, String value);
+
 
 }

@@ -1,13 +1,12 @@
 package com.gxy.web.api;
 
 import com.alibaba.fastjson.JSON;
-import com.gxy.consumer.DynamicMessageConsumer;
+import com.gxy.queue.DynamicMessageConsumer;
 import com.gxy.entity.UserEntity;
-import com.gxy.producer.DynamicMessageProducer;
+import com.gxy.queue.DynamicMessageProducer;
 import com.gxy.service.UserService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -58,11 +57,5 @@ public class TestController {
             dynamicMessageProducer.produceMessage(specialMessage, true); // true表示特殊消息
         }
         return "20 条普通消息和 5 条特殊消息已生产！";
-    }
-    @RequestMapping("/consumer")
-    public String consumer() {
-        dynamicMessageConsumer.consumeNCardMessages();
-        dynamicMessageConsumer.consumeNACardMessages();
-        return "开始消费消息！";
     }
 }

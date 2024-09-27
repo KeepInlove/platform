@@ -5,14 +5,13 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import org.springframework.data.redis.connection.RedisListCommands.Direction;
 /**
@@ -178,6 +177,16 @@ public class RedisServiceImpl implements RedisService {
             return false;
         }
     }
+    @Override
+    public boolean rightPushToList(String key, List<String> value) {
+        try {
+            redisTemplate.opsForList().rightPushAll(key, value);
+            return true;
+        } catch (Exception ex) {
+            logger.error(">>> Redis 插入消息到队列尾部失败. key={}, ex={}", key, ex);
+            return false;
+        }
+    }
 
     @Override
     public boolean leftPushToList(String key, String value) {
@@ -189,7 +198,16 @@ public class RedisServiceImpl implements RedisService {
             return false;
         }
     }
-
+    @Override
+    public boolean leftPushToList(String key, List<String> value) {
+        try {
+            redisTemplate.opsForList().leftPushAll(key, value);
+            return true;
+        } catch (Exception ex) {
+            logger.error(">>> Redis 插入消息到队列头部失败. key={}, ex={}", key, ex);
+            return false;
+        }
+    }
     @Override
     public String rightPop(String key, long timeout, TimeUnit timeUnit) {
         try {
@@ -197,6 +215,49 @@ public class RedisServiceImpl implements RedisService {
         } catch (Exception ex) {
             logger.error(">>> Redis rightPop 操作失败. key={}, ex={}", key, ex);
             return null;
+        }
+    }
+
+    @Override
+    public String blmove(String sourceKey, String destinationKey, long timeout, TimeUnit timeUnit) {
+        try {
+            return redisTemplate.execute((RedisCallback<String>) connection -> {
+                RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
+                byte[] source = serializer.serialize(sourceKey);
+                byte[] destination = serializer.serialize(destinationKey);
+                Direction from = Direction.LEFT;   // 从左侧弹出，实现 FIFO
+                Direction to = Direction.RIGHT;    // 推入右侧
+
+                // 将超时时间转换为秒
+                double timeoutInSeconds = timeUnit.toMillis(timeout) / 1000.0;
+                // 调用 bLMove 命令
+                assert source != null;
+                assert destination != null;
+                byte[] result = connection.listCommands().bLMove(
+                        source,
+                        destination,
+                        from,
+                        to,
+                        timeoutInSeconds
+                );
+                if (result != null) {
+                    return serializer.deserialize(result);
+                } else {
+                    return null;
+                }
+            });
+        } catch (Exception ex) {
+            logger.error(">>> Redis blmove 操作失败. sourceKey={}, ex={}", sourceKey, ex);
+            return null;
+        }
+    }
+
+    @Override
+    public void removeQueue(String key, int count, String value) {
+        try {
+            redisTemplate.opsForList().remove(key, count, value);
+        } catch (Exception ex) {
+            logger.error(">>> Redis出队失败. key={}, ex={}", key, ex);
         }
     }
 

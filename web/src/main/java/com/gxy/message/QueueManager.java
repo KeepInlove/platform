@@ -1,7 +1,7 @@
 package com.gxy.message;
 import com.google.gson.Gson;
 import com.gxy.constant.CallMessageConstant;
-import com.gxy.entity.GpuEntity;
+import com.gxy.queue.QueueInfoDTO;
 import com.gxy.service.RedisService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -28,11 +28,11 @@ public class QueueManager {
 
     @PostConstruct
     public void initGpuConfig() {
-        GpuEntity gpu1 = new GpuEntity("gpu4090-1", "full_case_analysis_call_tag_N", 1);
-        GpuEntity gpu2 = new GpuEntity("gpu4090-2", "full_case_analysis_call_tag_N", 1);
-        GpuEntity gpu3 = new GpuEntity("v100-1", "full_case_analysis_call_tag_A", 3);
-        GpuEntity gpu4 = new GpuEntity("v100-2", "full_case_analysis_call_tag_A", 3);
-        GpuEntity gpu5 = new GpuEntity("v100-3", "full_case_analysis_call_tag_A", 3);
+        QueueInfoDTO gpu1 = new QueueInfoDTO("gpu4090-1", "full_case_analysis_call_tag_N", 1);
+        QueueInfoDTO gpu2 = new QueueInfoDTO("gpu4090-2", "full_case_analysis_call_tag_N", 1);
+        QueueInfoDTO gpu3 = new QueueInfoDTO("v100-1", "full_case_analysis_call_tag_A", 3);
+        QueueInfoDTO gpu4 = new QueueInfoDTO("v100-2", "full_case_analysis_call_tag_A", 3);
+        QueueInfoDTO gpu5 = new QueueInfoDTO("v100-3", "full_case_analysis_call_tag_A", 3);
 
         // 使用 Gson 将数据序列化为 JSON 并存储到 Redis 的哈希表中
         redisService.setHashField(CallMessageConstant.N_CARD_KEY, gpu1.getIdentifier(), gson.toJson(gpu1));
@@ -43,20 +43,20 @@ public class QueueManager {
     }
 
     // 从 Redis 获取 N 卡队列
-    public List<GpuEntity> getNQueues() {
+    public List<QueueInfoDTO> getNQueues() {
         return getGpuConfigFromRedis(CallMessageConstant.N_CARD_KEY);
     }
 
     // 从 Redis 获取 N + A 卡队列
-    public List<GpuEntity> getAQueues() {
+    public List<QueueInfoDTO> getAQueues() {
         return getGpuConfigFromRedis(CallMessageConstant.A_CARD_KEY);
     }
 
     // 从 Redis 获取所有队列（N 卡 + N+A 卡共享队列）
-    public List<GpuEntity> getAllQueues() {
-        List<GpuEntity> allQueues = new ArrayList<>();
-        List<GpuEntity> nQueues = getNQueues();
-        List<GpuEntity> aQueues = getAQueues();
+    public List<QueueInfoDTO> getAllQueues() {
+        List<QueueInfoDTO> allQueues = new ArrayList<>();
+        List<QueueInfoDTO> nQueues = getNQueues();
+        List<QueueInfoDTO> aQueues = getAQueues();
 
         if (nQueues != null && !nQueues.isEmpty()) {
             allQueues.addAll(nQueues);
@@ -68,18 +68,18 @@ public class QueueManager {
     }
 
     // 从 Redis 获取 GPU 配置
-    private List<GpuEntity> getGpuConfigFromRedis(String key) {
+    private List<QueueInfoDTO> getGpuConfigFromRedis(String key) {
         Map<String, String> gpuMap = redisService.getHashEntries(key);
         if (gpuMap == null || gpuMap.isEmpty()) {
             log.warn("从 Redis 中未获取到队列配置: {}", key);
             return new ArrayList<>();
         }
 
-        List<GpuEntity> gpuList = new ArrayList<>();
+        List<QueueInfoDTO> gpuList = new ArrayList<>();
         for (Map.Entry<String, String> entry : gpuMap.entrySet()) {
             String gpuJson = entry.getValue();
-            GpuEntity gpuEntity = gson.fromJson(gpuJson, GpuEntity.class);
-            gpuList.add(gpuEntity);
+            QueueInfoDTO TagServiceDTO = gson.fromJson(gpuJson, QueueInfoDTO.class);
+            gpuList.add(TagServiceDTO);
         }
         return gpuList;
     }

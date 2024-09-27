@@ -1,9 +1,9 @@
 spring:
   data:
     redis:
-      host: 10.253.3.101
-      port: 8077
-      password: hjFCase@k493gs
+      host: 127.0.0.1
+      port: 6379
+      password:
       database: 0
       client-type: jedis      # 指定使用 Jedis 客户端
       jedis:
