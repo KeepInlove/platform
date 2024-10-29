@@ -1,10 +1,5 @@
 package com.gxy.service.impl;
 
-import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
-import com.alibaba.dashscope.aigc.codegeneration.CodeGenerationOutput;
-import com.alibaba.dashscope.aigc.completion.ChatCompletion;
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
@@ -27,9 +22,10 @@ import com.gxy.resp.ChatCompletionResp;
 import com.gxy.service.OpenAiService;
 import com.gxy.utils.HttpClientUtils;
 import com.mybatisflex.core.query.QueryWrapper;
-import io.micrometer.common.util.StringUtils;
+
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -39,6 +35,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static com.gxy.entity.table.ModelRequestsRespEntityTableDef.MODEL_REQUESTS_RESP_ENTITY;
 
@@ -112,11 +109,11 @@ public class OpenAiServiceImpl implements OpenAiService {
         entity.setQuestion(prompt);
         entity.setRequestTime(new Timestamp(startTime));
 
-        if (!StrUtil.isBlank(sessionId)) {
+        if (!StringUtils.isBlank(sessionId)) {
             list = modelRequestsRespMapper.selectListByQuery(QueryWrapper.create().where(MODEL_REQUESTS_RESP_ENTITY.SESSION_ID.eq(sessionId)));
             if (!CollectionUtils.isEmpty(list) ) {
                 ModelRequestsRespEntity modelRequestsResp = list.getFirst();
-                if (modelRequestsResp != null && StrUtil.isBlank(roleDesc) && !StrUtil.isBlank(modelRequestsResp.getRoleDesc())) {
+                if (modelRequestsResp != null && StringUtils.isBlank(roleDesc) && !StringUtils.isBlank(modelRequestsResp.getRoleDesc())) {
                     roleDesc = modelRequestsResp.getRoleDesc();
                 }
                 for (ModelRequestsRespEntity respEntity : list) {
@@ -136,9 +133,9 @@ public class OpenAiServiceImpl implements OpenAiService {
         }
 
         String content = "";
-        roleDesc =  StrUtil.isBlank(roleDesc)? "You are a helpful assistant" : roleDesc;
+        roleDesc =  StringUtils.isBlank(roleDesc)? "You are a helpful assistant" : roleDesc;
         entity.setRoleDesc(roleDesc);
-        sessionId= StrUtil.isBlank(sessionId)? UUID.fastUUID().toString(false) : sessionId;
+        sessionId= StringUtils.isBlank(sessionId)? UUID.randomUUID().toString() : sessionId;
         entity.setSessionId(sessionId);
         modelRequestsRespMapper.insertSelective(entity);
 
@@ -167,12 +164,12 @@ public class OpenAiServiceImpl implements OpenAiService {
                 .maxTokens(2000)
                 .tools(getToolFunctionList())
                 .build();
-        log.info("AI请求参数={}", JSONUtil.toJsonStr(param));
+        log.info("AI请求参数={}", JSON.toJSONString(param));
         // 调用API
         GenerationResult result = null;
         try {
             result = gen.call(param);
-            log.info("AI返回结果={}", JSONUtil.toJsonStr(result));
+            log.info("AI返回结果={}", JSON.toJSONString(result));
             if (null!=result.getOutput()&&null!=result.getOutput().getChoices()&&!result.getOutput().getChoices().isEmpty()) {
                 for (Choice choice : result.getOutput().getChoices()) {
                     if (result.getOutput().getChoices().get(0).getMessage().getToolCalls() != null) {
@@ -237,7 +234,7 @@ public class OpenAiServiceImpl implements OpenAiService {
             inputTokens += result.getUsage().getInputTokens();
             outputTokens += result.getUsage().getOutputTokens();
             totalTokens += result.getUsage().getTotalTokens();
-            log.info("再次AI返回结果={}", JSONUtil.toJsonStr(result));
+            log.info("再次AI返回结果={}", JSON.toJSONString(result));
 
             // 提取模型结果并存储到实体对象中
             entity.setRequestId(result.getRequestId());

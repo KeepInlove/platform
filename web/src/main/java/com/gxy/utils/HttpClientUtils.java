@@ -34,7 +34,6 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
-import org.springframework.boot.json.JsonParser;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 

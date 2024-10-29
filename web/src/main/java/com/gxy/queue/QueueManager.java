@@ -1,8 +1,8 @@
 package com.gxy.queue;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.LongSerializationPolicy;
+
+
+import com.alibaba.fastjson.JSON;
 import com.gxy.constant.CallMessageConstant;
 import com.gxy.service.RedisService;
 
@@ -29,7 +29,7 @@ public class QueueManager {
     @Resource
     private RedisService redisService;  // 使// RedisServiceImpl 代替 RedisTemplate
 
-    private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setLongSerializationPolicy(LongSerializationPolicy.STRING).disableHtmlEscaping().create();
+//    private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setLongSerializationPolicy(LongSerializationPolicy.STRING).disableHtmlEscaping().create();
 
 
     @PostConstruct
@@ -51,16 +51,16 @@ public class QueueManager {
         QueueInfoDTO gpu5 = new QueueInfoDTO("v100-2", "tag_A", 3);
         QueueInfoDTO gpu6 = new QueueInfoDTO("v100-3", "tag_A", 3);
 
-        redisService.setHashField(CallMessageConstant.N_CARD_KEY, gpu1.getIdentifier(), GSON.toJson(gpu1));
-        redisService.setHashField(CallMessageConstant.N_CARD_KEY, gpu2.getIdentifier(), GSON.toJson(gpu2));
-        redisService.setHashField(CallMessageConstant.N_CARD_KEY, gpu3.getIdentifier(), GSON.toJson(gpu3));
+        redisService.setHashField(CallMessageConstant.N_CARD_KEY, gpu1.getIdentifier(), JSON.toJSONString(gpu1));
+        redisService.setHashField(CallMessageConstant.N_CARD_KEY, gpu2.getIdentifier(), JSON.toJSONString(gpu2));
+        redisService.setHashField(CallMessageConstant.N_CARD_KEY, gpu3.getIdentifier(), JSON.toJSONString(gpu3));
         // 使用 Gson 将数据序列化为 JSON 并存储到 Redis 的哈希表中
-        redisService.setHashField(CallMessageConstant.A_CARD_KEY, gpu1.getIdentifier(), GSON.toJson(gpu1));
-        redisService.setHashField(CallMessageConstant.A_CARD_KEY, gpu2.getIdentifier(), GSON.toJson(gpu2));
-        redisService.setHashField(CallMessageConstant.A_CARD_KEY, gpu3.getIdentifier(), GSON.toJson(gpu3));
-        redisService.setHashField(CallMessageConstant.A_CARD_KEY, gpu4.getIdentifier(), GSON.toJson(gpu4));
-        redisService.setHashField(CallMessageConstant.A_CARD_KEY, gpu5.getIdentifier(), GSON.toJson(gpu5));
-        redisService.setHashField(CallMessageConstant.A_CARD_KEY, gpu6.getIdentifier(), GSON.toJson(gpu6));
+        redisService.setHashField(CallMessageConstant.A_CARD_KEY, gpu1.getIdentifier(),JSON.toJSONString(gpu1));
+        redisService.setHashField(CallMessageConstant.A_CARD_KEY, gpu2.getIdentifier(), JSON.toJSONString(gpu2));
+        redisService.setHashField(CallMessageConstant.A_CARD_KEY, gpu3.getIdentifier(), JSON.toJSONString(gpu3));
+        redisService.setHashField(CallMessageConstant.A_CARD_KEY, gpu4.getIdentifier(), JSON.toJSONString(gpu4));
+        redisService.setHashField(CallMessageConstant.A_CARD_KEY, gpu5.getIdentifier(), JSON.toJSONString(gpu5));
+        redisService.setHashField(CallMessageConstant.A_CARD_KEY, gpu6.getIdentifier(), JSON.toJSONString(gpu6));
     }
 
     // 从 Redis 获取 N 卡队列
@@ -85,7 +85,7 @@ public class QueueManager {
         List<QueueInfoDTO> gpuList = new ArrayList<>();
         for (Map.Entry<String, String> entry : gpuMap.entrySet()) {
             String gpuJson = entry.getValue();
-            QueueInfoDTO TagServiceDTO = GSON.fromJson(gpuJson, QueueInfoDTO.class);
+            QueueInfoDTO TagServiceDTO = JSON.parseObject(gpuJson, QueueInfoDTO.class);
             gpuList.add(TagServiceDTO);
         }
         return gpuList;

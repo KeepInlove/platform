@@ -44,6 +44,8 @@ public class DynamicMessageConsumer {
     private volatile boolean running = true; // 添加一个标志位来控制线程的运行状态
     @PostConstruct
     public void init() {
+        //重启时把消费失败的pendingKey全部入队到redisKey待消费队列
+        requeuePendingMessages();
         // 消费监听
         consumeNMessages();
     }
@@ -51,6 +53,26 @@ public class DynamicMessageConsumer {
     public void shutdown() {
         running = false; // 通知所有消费者线程停止
         threadPoolConfig.shutdownThreadPool(executor);
+    }
+
+    private void requeuePendingMessages() {
+        List<QueueInfoDTO> nCardQueues = queueManager.getNQueues();
+        List<QueueInfoDTO> aCardQueues = queueManager.getAQueues();
+        Map<String, QueueInfoDTO> cache = new HashMap<>();
+        nCardQueues.addAll(aCardQueues);
+        for (QueueInfoDTO tagService : nCardQueues) {
+            cache.put(tagService.getIdentifier(), tagService);
+        }
+        for (Map.Entry<String, QueueInfoDTO> entry: cache.entrySet()) {
+            QueueInfoDTO tagService = entry.getValue();
+            String redisKey = tagService.getRedisKey();
+            String pendingKey = redisKey + "Pending";
+            String message;// 从队列尾部弹出消息
+            while (null!=(message = redisService.rightPop(pendingKey, 5, TimeUnit.SECONDS))) {
+                redisService.leftPushToList(redisKey, message);
+                logger.info("从{}队列重新入队到{}队列的消息：{}",pendingKey,redisKey, message);
+            }
+        }
     }
 
     // 提交消费任务到线程池
